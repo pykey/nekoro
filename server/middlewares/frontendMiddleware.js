@@ -1,5 +1,6 @@
 const express = require('express');
 const compression = require('compression');
+const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 
@@ -8,6 +9,7 @@ module.exports = (app, options = {}) => {
   const outputPath = options.outputPath || path.resolve(process.cwd(), 'dist');
 
   app.use(compression());
+  app.use(cors());
   app.use(helmet());
   app.use(publicPath, express.static(outputPath));
 
