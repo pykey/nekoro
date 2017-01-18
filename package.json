@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:dev": "nodemon --watch server server",
     "start:prod": "node server",
     "prebuild": "rimraf build && npm run coverage",
     "build": "ng build -t production --aot",
@@ -19,6 +20,7 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor",
     "test:all": "npm run coverage && npm run e2e",
+    "clean:all": "rimraf coverage && rimraf dist && rimraf out",
     "coveralls": "cat ./coverage/coverage.lcov | coveralls",
     "heroku-prebuild": "npm install -g angular-cli@latest",
     "heroku-postbuild": "npm run build:only"
@@ -39,6 +41,7 @@
     "express": "^4.14.0",
     "helmet": "^3.4.0",
     "newrelic": "^1.36.1",
+    "parse-server": "^2.3.2",
     "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.2"
@@ -57,6 +60,7 @@
     "karma-cli": "^1.0.1",
     "karma-jasmine": "^1.0.2",
     "karma-remap-istanbul": "^0.2.1",
+    "nodemon": "^1.11.0",
     "nsp": "^2.6.2",
     "protractor": "~4.0.13",
     "rimraf": "^2.5.4",
