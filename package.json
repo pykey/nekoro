@@ -17,7 +17,9 @@
     "pree2e": "webdriver-manager update --standalone false --gecko false",
     "e2e": "protractor",
     "test:all": "npm run coverage && npm run e2e",
-    "coveralls": "cat ./coverage/coverage.lcov | coveralls"
+    "coveralls": "cat ./coverage/coverage.lcov | coveralls",
+    "heroku-prebuild": "npm install -g angular-cli@latest",
+    "heroku-postbuild": "npm run build"
   },
   "private": true,
   "dependencies": {
