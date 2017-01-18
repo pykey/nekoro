@@ -9,6 +9,7 @@
     "start:prod": "node server",
     "prebuild": "rimraf build && npm run coverage",
     "build": "ng build -t production --aot",
+    "build:only": "ng build -t production --aot",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
     "pretest": "npm run lint",
     "test": "ng test",
@@ -19,7 +20,7 @@
     "test:all": "npm run coverage && npm run e2e",
     "coveralls": "cat ./coverage/coverage.lcov | coveralls",
     "heroku-prebuild": "npm install -g angular-cli@latest",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build:only"
   },
   "private": true,
   "dependencies": {
