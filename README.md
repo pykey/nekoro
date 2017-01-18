@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/DarkerTV/nekoro.svg?branch=master)](https://travis-ci.org/DarkerTV/nekoro)
+[![Coverage Status](https://coveralls.io/repos/github/DarkerTV/nekoro/badge.svg?branch=master)](https://coveralls.io/github/DarkerTV/nekoro?branch=master)
+
 # Nekoro
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
