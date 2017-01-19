@@ -19,4 +19,4 @@ notifications:
 
 after_success:
   - npm run coveralls
-  - firebase deploy --mesage=${COMMIT_MESSAGE} --token=${FIREBASE_TOKEN}
+  - firebase deploy --message=${COMMIT_MESSAGE} --token=${FIREBASE_TOKEN}
