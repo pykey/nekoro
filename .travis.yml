@@ -7,6 +7,7 @@ script: npm run build
 
 before_install:
   - npm install -g angular-cli@latest
+  - export COMMIT_MESSAGE="$(git log --format=%B --no-merges -n 1)"
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
@@ -15,4 +16,6 @@ notifications:
   email:
     on_failure: change
 
-after_success: 'npm run coveralls'
+after_success:
+  - npm run coveralls
+  - firebase deploy --mesage=${COMMIT_MESSAGE} --token=${FIREBASE_TOKEN}
