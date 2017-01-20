@@ -130,7 +130,7 @@ export const reducer = (state = new State(), action: user.Actions): State => {
   }
 };
 
-/* istanbul ignore next */ export const isLoggedIn = (state: State) => state.get('loggedIn');
-/* istanbul ignore next */ export const isLoggingIn = (state: State) => state.get('loggingIn');
-/* istanbul ignore next */ export const isLoggingOut = (state: State) => state.get('loggingOut');
-/* istanbul ignore next */ export const getData = (state: State) => state.get('data');
+export const isLoggedIn = (state: State) => state.get('loggedIn');
+export const isLoggingIn = (state: State) => state.get('loggingIn');
+export const isLoggingOut = (state: State) => state.get('loggingOut');
+export const getData = (state: State) => state.get('data');

@@ -14,12 +14,11 @@ const reducers = {
   router: fromRouter.routerReducer
 };
 
-/* istanbul ignore next */
 export function reducer(state: any, action: Action): any {
   return combineReducers(reducers)(state, action);
 }
 
-/* istanbul ignore next */ export const getUserState = (state: State) => state.user;
+export const getUserState = (state: State) => state.user;
 export const isUserLoggedIn = createSelector(getUserState, fromUser.isLoggedIn);
 export const isUserLoggingIn = createSelector(getUserState, fromUser.isLoggingIn);
 export const isUserLoggingOut = createSelector(getUserState, fromUser.isLoggingOut);
