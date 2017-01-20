@@ -11,6 +11,10 @@ export class UserService {
 
   constructor(private af: AngularFire) { }
 
+  auth(): AngularFireAuth {
+    return this.af.auth;
+  }
+
   login(credentials: EmailPasswordCredentials): firebase.Promise<FirebaseAuthState> {
     log.info('Sending login request to Firebase');
 
@@ -25,9 +29,5 @@ export class UserService {
     log.info('Logging out from Firebase');
 
     return this.af.auth.logout();
-  }
-
-  get auth(): AngularFireAuth {
-    return this.af.auth;
   }
 }

@@ -85,6 +85,30 @@ describe('UserService', () => {
     expect(userService).toBeDefined();
   });
 
+  describe('Auth', () => {
+    it('should return an observable', () => {
+      expect(userService.auth() instanceof Observable).toBeTruthy();
+    });
+
+    it('should emit auth updates', done => {
+      fbAuthObserver.next(null);
+
+      userService.auth()
+        .take(1)
+        .do(authData => {
+          expect(authData).toBeNull();
+          setTimeout(() => fbAuthObserver.next(firebaseUser));
+        })
+        .subscribe();
+
+      userService.auth()
+        .skip(1)
+        .take(1)
+        .do(authData => expect(authData.auth).toEqual(AngularFireAuthState.auth))
+        .subscribe(null, done.fail, done);
+    }, 10);
+  });
+
   describe('Login', () => {
     const credentials = {
       email: 'david@fire.com',
@@ -114,26 +138,4 @@ describe('UserService', () => {
       expect(firebaseApp.auth().signOut).toHaveBeenCalled();
     });
   });
-
-  it('#auth should be an observable', () => {
-    expect(userService.auth instanceof Observable).toBeTruthy();
-  });
-
-  it('#auth should emit auth updates', done => {
-    fbAuthObserver.next(null);
-
-    userService.auth
-      .take(1)
-      .do(authData => {
-        expect(authData).toBeNull();
-        setTimeout(() => fbAuthObserver.next(firebaseUser));
-      })
-      .subscribe();
-
-    userService.auth
-      .skip(1)
-      .take(1)
-      .do(authData => expect(authData.auth).toEqual(AngularFireAuthState.auth))
-      .subscribe(null, done.fail, done);
-  }, 10);
 });

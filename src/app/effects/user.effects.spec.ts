@@ -3,6 +3,8 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
 import { AngularFireModule, FirebaseAuthState } from 'angularfire2';
+import { _throw } from 'rxjs/observable/throw';
+import { of } from 'rxjs/observable/of';
 
 import { firebaseConfig, firebaseAuthConfig } from '../app.module';
 
@@ -10,9 +12,9 @@ import { UserService } from '../core/user.service';
 
 import * as fromUser from '../actions/user.actions';
 import { UserEffects } from './user.effects';
-import { of } from 'rxjs/observable/of';
 
 const userMethods = [
+  'auth',
   'login',
   'logout'
 ];
@@ -41,6 +43,7 @@ const AngularFireAuthState = {
 } as FirebaseAuthState;
 
 describe('User Effects', () => {
+  const err = new Error();
   let runner: EffectsRunner;
   let userEffects: UserEffects;
   let userService: UserService;
@@ -48,6 +51,7 @@ describe('User Effects', () => {
 
   beforeEach(() => {
     mockUserService = jasmine.createSpyObj('user', userMethods);
+    mockUserService.auth.and.returnValue(of(null));
     mockUserService.login.and.returnValue(Promise.resolve(AngularFireAuthState));
     mockUserService.logout.and.returnValue(Promise.resolve(null));
 
@@ -59,11 +63,7 @@ describe('User Effects', () => {
       providers: [
         {
           provide: UserService,
-          useFactory() {
-            return Object.assign({}, mockUserService, {
-              auth: of(null)
-            });
-          }
+          useValue: mockUserService
         },
         UserEffects
       ]
@@ -85,6 +85,16 @@ describe('User Effects', () => {
         expect(result).toEqual(new fromUser.LoadSuccessAction(null));
       });
     });
+
+    it('should return FAIL if LOAD fails', () => {
+      mockUserService.auth.and.returnValue(_throw(err));
+
+      runner.queue(new fromUser.LoadAction());
+
+      userEffects.load$.subscribe(result => {
+        expect(result).toEqual(new fromUser.LoadFailAction(err));
+      });
+    });
   });
 
   describe('Login', () => {
@@ -93,6 +103,16 @@ describe('User Effects', () => {
 
       userEffects.login$.subscribe(result => {
         expect(result).toEqual(new fromUser.LoginSuccessAction(AngularFireAuthState));
+      });
+    });
+
+    it('should return FAIL if LOGIN fails', () => {
+      mockUserService.login.and.returnValue(Promise.reject(err));
+
+      runner.queue(new fromUser.LoginAction(credentials));
+
+      userEffects.login$.subscribe(result => {
+        expect(result).toEqual(new fromUser.LoginFailAction(err));
       });
     });
 
@@ -111,6 +131,16 @@ describe('User Effects', () => {
 
       userEffects.logout$.subscribe(result => {
         expect(result).toEqual(new fromUser.LogoutSuccessAction());
+      });
+    });
+
+    it('should return FAIL if LOGOUT fails', () => {
+      mockUserService.logout.and.returnValue(Promise.reject(err));
+
+      runner.queue(new fromUser.LogoutAction());
+
+      userEffects.logout$.subscribe(result => {
+        expect(result).toEqual(new fromUser.LogoutFailAction(err));
       });
     });
 

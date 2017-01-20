@@ -23,9 +23,9 @@ export class UserEffects {
   load$: Observable<Action> = this.actions$
     .ofType(user.LOAD)
     .switchMap(() =>
-      this.uService.auth.first()
+      this.uService.auth().first()
         .switchMap((authState: FirebaseAuthState) => of(new user.LoadSuccessAction(authState)))
-        .catch(/* istanbul ignore next */ err => of(new user.LoadFailAction(err)))
+        .catch(err => of(new user.LoadFailAction(err)))
     );
 
   @Effect()
@@ -35,7 +35,7 @@ export class UserEffects {
     .switchMap((credentials: EmailPasswordCredentials) =>
       fromPromise(<Promise<FirebaseAuthState>>this.uService.login(credentials))
         .mergeMap((authState: FirebaseAuthState) => of(new user.LoginSuccessAction(authState)))
-        .catch(/* istanbul ignore next */ err => of(new user.LoginFailAction(err)))
+        .catch(err => of(new user.LoginFailAction(err)))
     );
 
 
@@ -46,7 +46,7 @@ export class UserEffects {
     .switchMap(() =>
       fromPromise(this.uService.logout())
         .mergeMap(() => of(new user.LogoutSuccessAction()))
-        .catch(/* istanbul ignore next */ err => of(new user.LogoutFailAction(err)))
+        .catch(err => of(new user.LogoutFailAction(err)))
     );
 
   constructor(private actions$: Actions, private uService: UserService) { }
