@@ -8,6 +8,7 @@ script: npm run build
 before_install:
   - npm install -g angular-cli@latest
   - npm install -g firebase-tools
+  - npm install -g firebase-bolt
   - export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\"
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
@@ -19,4 +20,4 @@ notifications:
 
 after_success:
   - npm run coveralls
-  - firebase deploy --message="$COMMIT_MESSAGE" --token=${FIREBASE_TOKEN}
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then firebase deploy --message="$COMMIT_MESSAGE" --token=${FIREBASE_TOKEN}; fi'
