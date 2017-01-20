@@ -17,6 +17,8 @@ export class Logger {
   constructor(name: string) {
     const namespace = `nekoro:${name}`;
 
+    debug.enable(namespace);
+
     this.enable = environment.debug;
 
     this.l = debug(namespace);
@@ -34,35 +36,39 @@ export class Logger {
 
   log(msg: string, ...extra: any[]): void {
     if (this.enable) {
-      extra ? this.l(msg, ...extra) : this.l(msg);
+      extra.length > 0 ? this.l(msg, ...extra) : this.l(msg);
     }
   }
 
   debug(msg: string, ...extra: any[]): void {
     if (this.enable) {
-      extra ? this.d(msg, ...extra) : this.d(msg);
+      extra.length > 0 ? this.d(msg, ...extra) : this.d(msg);
     }
   }
 
   info(msg: string, ...extra: any[]): void {
     if (this.enable) {
-      extra ? this.i(msg, ...extra) : this.i(msg);
+      extra.length > 0 ? this.i(msg, ...extra) : this.i(msg);
     }
   }
 
   warn(msg: string, ...extra: any[]): void {
     if (this.enable) {
-      extra ? this.w(msg, ...extra) : this.w(msg);
+      extra.length > 0 ? this.w(msg, ...extra) : this.w(msg);
     }
   }
 
   error(msg: string, ...extra: any[]): void {
     if (this.enable) {
-      extra ? this.e(msg, ...extra) : this.e(msg);
+      extra.length > 0 ? this.e(msg, ...extra) : this.e(msg);
     }
   }
 
   get isEnabled(): boolean {
     return this.enable;
+  }
+
+  set enabled(enable) {
+    this.enable = enable;
   }
 }

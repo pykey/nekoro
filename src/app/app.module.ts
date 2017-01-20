@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@angular/material';
+import { EffectsModule } from '@ngrx/effects';
 import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -16,6 +17,7 @@ import { CoreModule } from './core/core.module';
 
 import { AppComponent } from './app.component';
 
+import { UserEffects } from './effects/user.effects';
 import { reducer } from './reducers';
 
 export const firebaseConfig = environment.firebaseConfig;
@@ -31,6 +33,7 @@ export const firebaseAuthConfig = {
     FlexLayoutModule.forRoot(),
     MaterialModule.forRoot(),
 
+    EffectsModule.run(UserEffects),
     RouterStoreModule.connectRouter(),
     StoreModule.provideStore(reducer),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
