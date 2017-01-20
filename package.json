@@ -8,7 +8,7 @@
     "rimraf": "rimraf",
     "start": "ng serve",
     "prebuild": "run-s \"rimraf build\" \"coverage\"",
-    "build": "ng build -t production --aot",
+    "build": "ng build -t production",
     "checkdep": "nsp check",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
     "pretest": "run-s \"checkdep\" \"lint\"",
@@ -76,5 +76,6 @@
     "ts-node": "1.2.1",
     "tslint": "^4.3.0",
     "typescript": "~2.0.3"
-  }
+  },
+  "//": "TODO: Change build to AOT when angular/angular#13436 get fixed"
 }
