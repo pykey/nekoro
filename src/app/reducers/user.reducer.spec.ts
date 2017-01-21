@@ -4,7 +4,7 @@ import { TestBed, inject } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { FirebaseAuthState } from 'angularfire2';
 
-import * as fromUser from '../actions/user.actions';
+import * as user from '../actions/user.actions';
 import * as fromRoot from './';
 import { State } from './user.reducer';
 
@@ -43,7 +43,7 @@ describe('UserReducer', () => {
 
   describe('Load', () => {
     it('should change state on LOAD', () => {
-      store.dispatch(new fromUser.LoadAction());
+      store.dispatch(new user.LoadAction());
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -56,7 +56,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOAD SUCCESS', () => {
-      store.dispatch(new fromUser.LoadSuccessAction(AngularFireAuthState));
+      store.dispatch(new user.LoadSuccessAction(AngularFireAuthState));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -69,7 +69,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOAD SUCCESS but no found', () => {
-      store.dispatch(new fromUser.LoadSuccessAction(null));
+      store.dispatch(new user.LoadSuccessAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -82,7 +82,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOAD FAIL', () => {
-      store.dispatch(new fromUser.LoadFailAction(null));
+      store.dispatch(new user.LoadFailAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -97,7 +97,7 @@ describe('UserReducer', () => {
 
   describe('Login', () => {
     it('should change state on LOGIN', () => {
-      store.dispatch(new fromUser.LoginAction(null));
+      store.dispatch(new user.LoginAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -110,7 +110,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOGIN SUCCESS', () => {
-      store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
+      store.dispatch(new user.LoginSuccessAction(AngularFireAuthState));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -123,7 +123,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOGIN FAIL', () => {
-      store.dispatch(new fromUser.LoginFailAction(null));
+      store.dispatch(new user.LoginFailAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -138,7 +138,7 @@ describe('UserReducer', () => {
 
   describe('Register', () => {
     it('should change state on REGISTER', () => {
-      store.dispatch(new fromUser.RegisterAction(null));
+      store.dispatch(new user.RegisterAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
@@ -146,7 +146,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on REGISTER SUCCESS', () => {
-      store.dispatch(new fromUser.RegisterSuccessAction(null));
+      store.dispatch(new user.RegisterSuccessAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
@@ -154,7 +154,7 @@ describe('UserReducer', () => {
     });
 
     it('should change state on REGISTER FAIL', () => {
-      store.dispatch(new fromUser.RegisterFailAction(null));
+      store.dispatch(new user.RegisterFailAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
@@ -164,8 +164,8 @@ describe('UserReducer', () => {
 
   describe('Logout', () => {
     it('should change state on LOGOUT', () => {
-      store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
-      store.dispatch(new fromUser.LogoutAction());
+      store.dispatch(new user.LoginSuccessAction(AngularFireAuthState));
+      store.dispatch(new user.LogoutAction());
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -178,8 +178,8 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOGOUT SUCCESS', () => {
-      store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
-      store.dispatch(new fromUser.LogoutSuccessAction());
+      store.dispatch(new user.LoginSuccessAction(AngularFireAuthState));
+      store.dispatch(new user.LogoutSuccessAction());
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
@@ -192,8 +192,8 @@ describe('UserReducer', () => {
     });
 
     it('should change state on LOGOUT FAIL', () => {
-      store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
-      store.dispatch(new fromUser.LogoutFailAction(null));
+      store.dispatch(new user.LoginSuccessAction(AngularFireAuthState));
+      store.dispatch(new user.LogoutFailAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({

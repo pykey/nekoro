@@ -3,14 +3,14 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
 import { AngularFireModule, FirebaseAuthState } from 'angularfire2';
-import { _throw } from 'rxjs/observable/throw';
 import { of } from 'rxjs/observable/of';
+import { _throw } from 'rxjs/observable/throw';
 
 import { firebaseConfig, firebaseAuthConfig } from '../app.module';
 
 import { UserService } from '../core/user.service';
 
-import * as fromUser from '../actions/user.actions';
+import * as user from '../actions/user.actions';
 import { UserEffects } from './user.effects';
 
 const userMethods = [
@@ -79,25 +79,25 @@ describe('User Effects', () => {
 
   describe('Load', () => {
     it('should return SUCCESS on LOAD', () => {
-      runner.queue(new fromUser.LoadAction());
+      runner.queue(new user.LoadAction());
 
       userEffects.load$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LoadSuccessAction(null));
+        expect(result).toEqual(new user.LoadSuccessAction(null));
       });
     });
 
     it('should return FAIL if LOAD fails', () => {
       mockUserService.auth.and.returnValue(_throw(err));
 
-      runner.queue(new fromUser.LoadAction());
+      runner.queue(new user.LoadAction());
 
       userEffects.load$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LoadFailAction(err));
+        expect(result).toEqual(new user.LoadFailAction(err));
       });
     });
 
     it('should call auth on user service', () => {
-      runner.queue(new fromUser.LoadAction());
+      runner.queue(new user.LoadAction());
 
       userEffects.login$.subscribe(() => {
         expect(userService.auth).toHaveBeenCalled();
@@ -107,25 +107,25 @@ describe('User Effects', () => {
 
   describe('Login', () => {
     it('should return SUCCESS on LOGIN', () => {
-      runner.queue(new fromUser.LoginAction(credentials));
+      runner.queue(new user.LoginAction(credentials));
 
       userEffects.login$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LoginSuccessAction(AngularFireAuthState));
+        expect(result).toEqual(new user.LoginSuccessAction(AngularFireAuthState));
       });
     });
 
     it('should return FAIL if LOGIN fails', () => {
       mockUserService.login.and.returnValue(Promise.reject(err));
 
-      runner.queue(new fromUser.LoginAction(credentials));
+      runner.queue(new user.LoginAction(credentials));
 
       userEffects.login$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LoginFailAction(err));
+        expect(result).toEqual(new user.LoginFailAction(err));
       });
     });
 
     it('should call login on user service', () => {
-      runner.queue(new fromUser.LoginAction(credentials));
+      runner.queue(new user.LoginAction(credentials));
 
       userEffects.login$.subscribe(() => {
         expect(userService.login).toHaveBeenCalledWith(credentials);
@@ -135,25 +135,25 @@ describe('User Effects', () => {
 
   describe('Logout', () => {
     it('should return SUCCESS on LOGOUT', () => {
-      runner.queue(new fromUser.LogoutAction());
+      runner.queue(new user.LogoutAction());
 
       userEffects.logout$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LogoutSuccessAction());
+        expect(result).toEqual(new user.LogoutSuccessAction());
       });
     });
 
     it('should return FAIL if LOGOUT fails', () => {
       mockUserService.logout.and.returnValue(Promise.reject(err));
 
-      runner.queue(new fromUser.LogoutAction());
+      runner.queue(new user.LogoutAction());
 
       userEffects.logout$.subscribe(result => {
-        expect(result).toEqual(new fromUser.LogoutFailAction(err));
+        expect(result).toEqual(new user.LogoutFailAction(err));
       });
     });
 
     it('should call logout on user service', () => {
-      runner.queue(new fromUser.LogoutAction());
+      runner.queue(new user.LogoutAction());
 
       userEffects.logout$.subscribe(() => {
         expect(userService.logout).toHaveBeenCalled();
