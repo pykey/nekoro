@@ -51,6 +51,7 @@ describe('UserService', () => {
       fbAuthObserver = obs;
     });
     mockFirebaseAuth.getRedirectResult.and.returnValue(Promise.resolve(null));
+    mockFirebaseAuth.signOut.and.returnValue(Promise.resolve(null));
 
     TestBed.configureTestingModule({
       imports: [
@@ -133,6 +134,10 @@ describe('UserService', () => {
   });
 
   describe('Logout', () => {
+    it('should return a Promise', () => {
+      expect(userService.logout() instanceof Promise).toBeTruthy();
+    });
+
     it('should logout the user', () => {
       userService.logout();
       expect(firebaseApp.auth().signOut).toHaveBeenCalled();

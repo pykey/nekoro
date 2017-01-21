@@ -10,7 +10,7 @@ export interface State {
 }
 
 const reducers = {
-  user: fromUser.State,
+  user: fromUser.reducer,
   router: fromRouter.routerReducer
 };
 
@@ -18,7 +18,7 @@ export function reducer(state: any, action: Action): any {
   return combineReducers(reducers)(state, action);
 }
 
-export const getUserState = (state: State) => state.user;
+export const getUserState = (state: State): fromUser.State => state.user;
 export const isUserLoggedIn = createSelector(getUserState, fromUser.isLoggedIn);
 export const isUserLoggingIn = createSelector(getUserState, fromUser.isLoggingIn);
 export const isUserLoggingOut = createSelector(getUserState, fromUser.isLoggingOut);

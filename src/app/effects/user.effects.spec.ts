@@ -95,6 +95,14 @@ describe('User Effects', () => {
         expect(result).toEqual(new fromUser.LoadFailAction(err));
       });
     });
+
+    it('should call auth on user service', () => {
+      runner.queue(new fromUser.LoadAction());
+
+      userEffects.login$.subscribe(() => {
+        expect(userService.auth).toHaveBeenCalled();
+      });
+    });
   });
 
   describe('Login', () => {

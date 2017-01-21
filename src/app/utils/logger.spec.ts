@@ -16,12 +16,19 @@ describe('Logger', () => {
     spyOn(console, 'warn');
     spyOn(console, 'error');
 
-    logger = Logger.create(null);
+    logger = Logger.create(logName, true);
   });
 
   describe('Create', () => {
     it('should return a new instace of Logger', () => {
-      expect(Logger.create(logName) instanceof Logger).toBeTruthy();
+      expect(Logger.create(logName, true) instanceof Logger).toBeTruthy();
+    });
+
+    it('should not log if passed false as second parameter', () => {
+      const subLogger = Logger.create('sub:logger:spec', false);
+
+      subLogger.log(message);
+      expect(console.log).not.toHaveBeenCalled();
     });
   });
 

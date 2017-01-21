@@ -29,12 +29,24 @@ export class State extends stateRecord implements StateI {
 
 export const reducer = (state = new State(), action: user.Actions): State => {
   switch (action.type) {
+    /**
+     * Sets loggingIn to false
+     */
     case user.LOAD: {
       log.debug('Requested session load from local storage');
 
       return state.set('loggingIn', true) as State;
     }
 
+    /**
+     * If data was found
+     * Sets loggedIn to true
+     * Sets loggingIn to false
+     * Sets data to Auth State
+     *
+     * If data wasn't found
+     * Sets loggingIn to false
+     */
     case user.LOAD_SUCCESS: {
       const data = action.payload;
 
@@ -52,6 +64,9 @@ export const reducer = (state = new State(), action: user.Actions): State => {
       }
     }
 
+    /**
+     * Sets loggingIn to false
+     */
     case user.LOAD_FAIL: {
       const err = action.payload;
 
@@ -60,12 +75,20 @@ export const reducer = (state = new State(), action: user.Actions): State => {
       return state.set('loggingIn', false) as State;
     }
 
+    /**
+     * Sets loggingIn to true
+     */
     case user.LOGIN: {
       log.debug('Requested login into Firebase');
 
       return state.set('loggingIn', true) as State;
     }
 
+    /**
+     * Sets loggedIn to true
+     * Sets loggingIn to false
+     * Sets data to Auth State
+     */
     case user.LOGIN_SUCCESS: {
       const data = action.payload;
 
@@ -77,6 +100,9 @@ export const reducer = (state = new State(), action: user.Actions): State => {
         .set('data', data) as State;
     }
 
+    /**
+     * Sets loggingIn to false
+     */
     case user.LOGIN_FAIL: {
       const err = action.payload;
 
@@ -85,14 +111,23 @@ export const reducer = (state = new State(), action: user.Actions): State => {
       return state.set('loggingIn', false) as State;
     }
 
+    /**
+     * TODO: WIP
+     */
     case user.REGISTER: {
       return state;
     }
 
+    /**
+     * TODO: WIP
+     */
     case user.REGISTER_SUCCESS: {
       return state;
     }
 
+    /**
+     * TODO: WIP
+     */
     case user.REGISTER_FAIL: {
       const err = action.payload;
 
@@ -101,12 +136,20 @@ export const reducer = (state = new State(), action: user.Actions): State => {
       return state;
     }
 
+    /**
+     * Sets loggingOut to true
+     */
     case user.LOGOUT: {
       log.debug('Requested logout');
 
       return state.set('loggingOut', true) as State;
     }
 
+    /**
+     * Sets loggedIn to false
+     * Sets loggingOut to false
+     * Sets data to null
+     */
     case user.LOGOUT_SUCCESS: {
       log.info('Logged out');
 
@@ -116,6 +159,9 @@ export const reducer = (state = new State(), action: user.Actions): State => {
         .set('data', null) as State;
     }
 
+    /**
+     * Sets loggingOut to false
+     */
     case user.LOGOUT_FAIL: {
       const err = action.payload;
 
@@ -130,7 +176,7 @@ export const reducer = (state = new State(), action: user.Actions): State => {
   }
 };
 
-export const isLoggedIn = (state: State) => state.get('loggedIn');
-export const isLoggingIn = (state: State) => state.get('loggingIn');
-export const isLoggingOut = (state: State) => state.get('loggingOut');
-export const getData = (state: State) => state.get('data');
+export const isLoggedIn = (state: State): boolean => state.get('loggedIn');
+export const isLoggingIn = (state: State): boolean => state.get('loggingIn');
+export const isLoggingOut = (state: State): boolean => state.get('loggingOut');
+export const getData = (state: State): FirebaseAuthState | null => state.get('data');

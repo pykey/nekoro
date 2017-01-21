@@ -5,7 +5,8 @@ import { Store, StoreModule } from '@ngrx/store';
 import { FirebaseAuthState } from 'angularfire2';
 
 import * as fromUser from '../actions/user.actions';
-import { State, reducer } from './user.reducer';
+import * as fromRoot from './';
+import { State } from './user.reducer';
 
 const firebaseUser = {
   uid: '12345',
@@ -26,16 +27,16 @@ const AngularFireAuthState = {
 } as FirebaseAuthState;
 
 describe('UserReducer', () => {
-  let store: Store<State>;
+  let store: Store<fromRoot.State>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.provideStore({ user: reducer })
+        StoreModule.provideStore(fromRoot.reducer)
       ]
     });
 
-    inject([Store], (s: Store<State>) => {
+    inject([Store], (s: Store<fromRoot.State>) => {
       store = s;
     })();
   });
@@ -44,7 +45,7 @@ describe('UserReducer', () => {
     it('should change state on LOAD', () => {
       store.dispatch(new fromUser.LoadAction());
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: true,
@@ -57,7 +58,7 @@ describe('UserReducer', () => {
     it('should change state on LOAD SUCCESS', () => {
       store.dispatch(new fromUser.LoadSuccessAction(AngularFireAuthState));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
@@ -70,7 +71,7 @@ describe('UserReducer', () => {
     it('should change state on LOAD SUCCESS but no found', () => {
       store.dispatch(new fromUser.LoadSuccessAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
@@ -83,7 +84,7 @@ describe('UserReducer', () => {
     it('should change state on LOAD FAIL', () => {
       store.dispatch(new fromUser.LoadFailAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
@@ -98,7 +99,7 @@ describe('UserReducer', () => {
     it('should change state on LOGIN', () => {
       store.dispatch(new fromUser.LoginAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: true,
@@ -111,7 +112,7 @@ describe('UserReducer', () => {
     it('should change state on LOGIN SUCCESS', () => {
       store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
@@ -124,7 +125,7 @@ describe('UserReducer', () => {
     it('should change state on LOGIN FAIL', () => {
       store.dispatch(new fromUser.LoginFailAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
@@ -139,7 +140,7 @@ describe('UserReducer', () => {
     it('should change state on REGISTER', () => {
       store.dispatch(new fromUser.RegisterAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
       });
     });
@@ -147,7 +148,7 @@ describe('UserReducer', () => {
     it('should change state on REGISTER SUCCESS', () => {
       store.dispatch(new fromUser.RegisterSuccessAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
       });
     });
@@ -155,7 +156,7 @@ describe('UserReducer', () => {
     it('should change state on REGISTER FAIL', () => {
       store.dispatch(new fromUser.RegisterFailAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual(state.toJS());
       });
     });
@@ -166,7 +167,7 @@ describe('UserReducer', () => {
       store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
       store.dispatch(new fromUser.LogoutAction());
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
@@ -180,7 +181,7 @@ describe('UserReducer', () => {
       store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
       store.dispatch(new fromUser.LogoutSuccessAction());
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
@@ -194,7 +195,7 @@ describe('UserReducer', () => {
       store.dispatch(new fromUser.LoginSuccessAction(AngularFireAuthState));
       store.dispatch(new fromUser.LogoutFailAction(null));
 
-      store.select('user').subscribe((state: State) => {
+      store.select(fromRoot.getUserState).subscribe((state: State) => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
@@ -202,6 +203,30 @@ describe('UserReducer', () => {
           data: AngularFireAuthState
         });
       });
+    });
+  });
+
+  it('#isLoggedIn should return loggedIn from state', () => {
+    store.select(fromRoot.isUserLoggedIn).subscribe((loggedIn: boolean) => {
+      expect(loggedIn).toBe(false);
+    });
+  });
+
+  it('#isLoggingIn should return loggingIn from state', () => {
+    store.select(fromRoot.isUserLoggingIn).subscribe((loggingIn: boolean) => {
+      expect(loggingIn).toBe(false);
+    });
+  });
+
+  it('#isLoggingOut should return loggingOut from state', () => {
+    store.select(fromRoot.isUserLoggingOut).subscribe((loggingOut: boolean) => {
+      expect(loggingOut).toBe(false);
+    });
+  });
+
+  it('#getData should return data from state', () => {
+    store.select(fromRoot.getUserData).subscribe((data: FirebaseAuthState) => {
+      expect(data).toBe(null);
     });
   });
 });

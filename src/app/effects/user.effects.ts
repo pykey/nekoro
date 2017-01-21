@@ -19,6 +19,14 @@ import * as user from '../actions/user.actions';
 @Injectable()
 export class UserEffects {
 
+  /**
+   * Watches user load action
+   * Calls auth observable from user service
+   * Executes user load success action if load success
+   * Executes user load fail action if load fails
+   *
+   * @type {Observable<Action>} Observable that execute the passed action
+   */
   @Effect()
   load$: Observable<Action> = this.actions$
     .ofType(user.LOAD)
@@ -28,6 +36,14 @@ export class UserEffects {
         .catch(err => of(new user.LoadFailAction(err)))
     );
 
+  /**
+   * Watches user login action
+   * Calls login method from user service
+   * Executes user login success action if login success
+   * Executes user login fail action if login fails
+   *
+   * @type {Observable<Action>} Observable that execute the passed action
+   */
   @Effect()
   login$: Observable<Action> = this.actions$
     .ofType(user.LOGIN)
@@ -39,7 +55,14 @@ export class UserEffects {
     );
 
 
-
+  /**
+   * Watches user logout action
+   * Calls logout mehotd from user service
+   * Executes user logout success action if logout success
+   * Executes user logout fail if logout fails
+   *
+   * @type {Observable<Action>} Observable that execute the passed action
+   */
   @Effect()
   logout$: Observable<Action> = this.actions$
     .ofType(user.LOGOUT)
