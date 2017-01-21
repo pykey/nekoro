@@ -7,9 +7,7 @@ import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 
 import { firebaseConfig, firebaseAuthConfig } from '../app.module';
-
 import { UserService } from '../core/user.service';
-
 import * as user from '../actions/user.actions';
 import { UserEffects } from './user.effects';
 
