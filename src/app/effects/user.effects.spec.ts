@@ -1,31 +1,40 @@
-/* tslint:disable:no-unused-variable */
+import 'rxjs/add/operator/skip';
 
 import { TestBed, inject } from '@angular/core/testing';
 import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
 import { AngularFireModule, FirebaseAuthState } from 'angularfire2';
+import { isEqual } from 'lodash';
 import { of } from 'rxjs/observable/of';
 import { _throw } from 'rxjs/observable/throw';
 
 import { firebaseConfig, firebaseAuthConfig } from '../app.module';
 import { UserService } from '../core/user.service';
+import * as notification from '../actions/notification.actions';
 import * as user from '../actions/user.actions';
 import { UserEffects } from './user.effects';
+import { mockRegisterForm } from '../models/register-form.model';
+
+const error = { code: 'test/user-effects', message: 'Testing user effects' };
 
 const userMethods = [
   'auth',
   'login',
+  'register',
+  'checkUsername',
+  'reserveUsername',
+  'saveUser',
   'logout'
 ];
 
 const credentials = {
-  email: 'david@fire.com',
+  email: 'neko@neko.ro',
   password: 'supersecretpassword'
 };
 
 const firebaseUser = {
   uid: '12345',
   providerData: [{
-    displayName: 'jeffbcross',
+    displayName: 'Nekoro',
     providerId: 'github.com'
   }]
 } as firebase.User;
@@ -40,8 +49,7 @@ const AngularFireAuthState = {
   } as firebase.UserInfo
 } as FirebaseAuthState;
 
-describe('User Effects', () => {
-  const err = new Error();
+describe('UserEffects', () => {
   let runner: EffectsRunner;
   let userEffects: UserEffects;
   let userService: UserService;
@@ -51,7 +59,11 @@ describe('User Effects', () => {
     mockUserService = jasmine.createSpyObj('user', userMethods);
     mockUserService.auth.and.returnValue(of(null));
     mockUserService.login.and.returnValue(Promise.resolve(AngularFireAuthState));
-    mockUserService.logout.and.returnValue(Promise.resolve(null));
+    mockUserService.register.and.returnValue(Promise.resolve(AngularFireAuthState));
+    mockUserService.checkUsername.and.returnValue(of(true));
+    mockUserService.reserveUsername.and.returnValue(Promise.resolve());
+    mockUserService.saveUser.and.returnValue(Promise.resolve());
+    mockUserService.logout.and.returnValue(Promise.resolve());
 
     TestBed.configureTestingModule({
       imports: [
@@ -85,12 +97,16 @@ describe('User Effects', () => {
     });
 
     it('should return FAIL if LOAD fails', () => {
-      mockUserService.auth.and.returnValue(_throw(err));
+      mockUserService.auth.and.returnValue(_throw(error));
 
       runner.queue(new user.LoadAction());
 
       userEffects.load$.subscribe(result => {
-        expect(result).toEqual(new user.LoadFailAction(err));
+        const doubleEqual =
+          isEqual(result, new user.LoadFailAction(error)) ||
+          isEqual(result, new notification.ErrorAction(error));
+
+        expect(doubleEqual).toBe(true);
       });
     });
 
@@ -113,12 +129,16 @@ describe('User Effects', () => {
     });
 
     it('should return FAIL if LOGIN fails', () => {
-      mockUserService.login.and.returnValue(Promise.reject(err));
+      mockUserService.login.and.returnValue(Promise.reject(error));
 
       runner.queue(new user.LoginAction(credentials));
 
       userEffects.login$.subscribe(result => {
-        expect(result).toEqual(new user.LoginFailAction(err));
+        const doubleEqual =
+          isEqual(result, new user.LoginFailAction(error)) ||
+          isEqual(result, new notification.ErrorAction(error));
+
+        expect(doubleEqual).toBe(true);
       });
     });
 
@@ -127,6 +147,41 @@ describe('User Effects', () => {
 
       userEffects.login$.subscribe(() => {
         expect(userService.login).toHaveBeenCalledWith(credentials);
+      });
+    });
+  });
+
+  describe('Register', () => {
+    it('should return SUCCESS on REGISTER', () => {
+      runner.queue(new user.RegisterAction(mockRegisterForm));
+
+      userEffects.register$.subscribe(result => {
+        expect(result).toEqual(new user.RegisterSuccessAction(AngularFireAuthState));
+      });
+    });
+
+    it('should return FAIL on REGISTER fails', () => {
+      mockUserService.register.and.returnValue(Promise.reject(error));
+
+      runner.queue(new user.RegisterAction(mockRegisterForm));
+
+      userEffects.register$.subscribe(result => {
+        const doubleEqual =
+          isEqual(result, new user.RegisterFailAction(error)) ||
+          isEqual(result, new notification.ErrorAction(error));
+
+        expect(doubleEqual).toBe(true);
+      });
+    });
+
+    it('should call some methods on user service', () => {
+      runner.queue(new user.RegisterAction(mockRegisterForm));
+
+      userEffects.register$.skip(1).subscribe(() => {
+        expect(userService.checkUsername).toHaveBeenCalledWith(mockRegisterForm.username);
+        expect(userService.register).toHaveBeenCalledWith(mockRegisterForm);
+        expect(userService.reserveUsername).toHaveBeenCalledWith(mockRegisterForm.username, AngularFireAuthState.uid);
+        expect(userService.saveUser).toHaveBeenCalledWith(mockRegisterForm, AngularFireAuthState.uid);
       });
     });
   });
@@ -141,12 +196,16 @@ describe('User Effects', () => {
     });
 
     it('should return FAIL if LOGOUT fails', () => {
-      mockUserService.logout.and.returnValue(Promise.reject(err));
+      mockUserService.logout.and.returnValue(Promise.reject(error));
 
       runner.queue(new user.LogoutAction());
 
       userEffects.logout$.subscribe(result => {
-        expect(result).toEqual(new user.LogoutFailAction(err));
+        const doubleEqual =
+          isEqual(result, new user.LogoutFailAction(error)) ||
+          isEqual(result, new notification.ErrorAction(error));
+
+        expect(doubleEqual).toBe(true);
       });
     });
 

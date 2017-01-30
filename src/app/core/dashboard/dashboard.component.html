@@ -1,0 +1,37 @@
+<div
+  class="wrapper"
+  fxLayout="row"
+  fxLayoutAlign="space-around center">
+  <div fxFlex="70">
+    <h1
+      i18n="App Title|Core Dashboard"
+      class="title">Nekoro</h1>
+
+    <div
+      *ngIf="!loggedIn"
+      fxLayout="row"
+      fxLayoutAlign="space-around center">
+      <button
+        i18n="Login Button|Core Dashboard"
+        color="primary"
+        (click)="doLogin()"
+        md-raised-button>Iniciar Sesión</button>
+      <button
+        i18n="Register Button|Core Dashboard"
+        color="accent"
+        (click)="doRegister()"
+        md-raised-button>Crear Cuenta</button>
+    </div>
+
+    <div
+      *ngIf="loggedIn"
+      fxlayout="row"
+      fxLayoutAlign="center center">
+      <button
+        i18n="Logout Button|Core Dashboard"
+        color="primary"
+        (click)="doLogout()"
+        md-raised-button>Cerrar Sesión</button>
+    </div>
+  </div>
+</div>

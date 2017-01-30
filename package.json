@@ -20,7 +20,8 @@
     "e2e": "protractor",
     "test:all": "run-s \"coverage\" \"e2e\"",
     "clean:all": "run-s \"rimraf coverage\" \"rimraf dist\"",
-    "coveralls": "cat ./coverage/coverage.lcov | coveralls"
+    "coveralls": "cat ./coverage/coverage.lcov | coveralls",
+    "deploy:database": "firebase deploy --only database"
   },
   "private": true,
   "dependencies": {
@@ -47,8 +48,10 @@
     "firebase": "^3.6.6",
     "hammerjs": "^2.0.8",
     "immutable": "^3.8.1",
+    "lodash": "^4.17.4",
     "reselect": "^2.5.4",
     "rxjs": "^5.0.1",
+    "sprintf-js": "^1.0.3",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.7.2"
   },
@@ -57,8 +60,10 @@
     "@types/debug": "0.0.29",
     "@types/hammerjs": "^2.0.34",
     "@types/jasmine": "2.5.38",
+    "@types/lodash": "4.14.50",
     "@types/node": "^6.0.42",
     "@types/reselect": "^2.0.27",
+    "@types/sprintf-js": "0.0.27",
     "angular-cli": "1.0.0-beta.26",
     "codelyzer": "~2.0.0-beta.1",
     "coveralls": "^2.11.15",
@@ -78,5 +83,8 @@
     "tslint": "^4.3.0",
     "typescript": "~2.0.3"
   },
-  "//": "TODO: Change build to AOT when angular/angular#13436 get fixed"
+  "//": [
+    "TODO: Change build to AOT, related angular/angular#13436",
+    "TODO: Force @types/lodash to version 4.14.50 from ^4.14.51, related DefinitelyTyped/DefinitelyTyped#14311"
+  ]
 }

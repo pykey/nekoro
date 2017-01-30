@@ -1,0 +1,49 @@
+<md-dialog-content>
+  <form
+    id="loginForm"
+    [formGroup]="form"
+    (submit)="onSubmit()"
+    fxLayout="row"
+    fxLayoutWrap>
+    <md-input-container fxFlex="grow">
+      <input
+        type="email"
+        i18n-placeholder="Email Placeholder|Core Login Dialog"
+        placeholder="Correo electrónico"
+        autocomplete="off"
+        formControlName="email"
+        md-input>
+
+      <md-hint *ngIf="errors.email" align="end" class="md-warn">{{ errors.email }}</md-hint>
+    </md-input-container>
+
+    <md-input-container fxFlex="grow">
+      <input
+        type="password"
+        i18n-placeholder="Password Placeholder|Core Login Dialog"
+        placeholder="Contraseña"
+        autocomplete="off"
+        formControlName="password"
+        md-input>
+
+      <md-hint *ngIf="errors.password" align="end" class="md-warn">{{ errors.password }}</md-hint>
+    </md-input-container>
+  </form>
+</md-dialog-content>
+
+<md-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="space-between">
+
+  <button
+    i18n="Close Button|Core Login Dialog"
+    color="warn"
+    md-button
+    md-dialog-close>Cerrar</button>
+
+  <button
+    i18n="Login Button|Core Login Dialog"
+    color="primary"
+    form="loginForm"
+    md-button>Iniciar Sesión</button>
+</md-dialog-actions>

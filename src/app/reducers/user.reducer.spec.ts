@@ -1,5 +1,3 @@
-/* tslint:disable:no-unused-variable */
-
 import { TestBed, inject } from '@angular/core/testing';
 import { Store, StoreModule } from '@ngrx/store';
 import { FirebaseAuthState } from 'angularfire2';
@@ -11,7 +9,7 @@ import { State } from './user.reducer';
 const firebaseUser = {
   uid: '12345',
   providerData: [{
-    displayName: 'jeffbcross',
+    displayName: 'Nekoro',
     providerId: 'github.com'
   }]
 } as firebase.User;
@@ -49,6 +47,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: true,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -62,6 +61,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: AngularFireAuthState
         });
@@ -75,6 +75,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -88,6 +89,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -103,6 +105,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: true,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -116,6 +119,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: AngularFireAuthState
         });
@@ -129,6 +133,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -138,18 +143,36 @@ describe('UserReducer', () => {
 
   describe('Register', () => {
     it('should change state on REGISTER', () => {
-      store.dispatch(new user.RegisterAction(null));
+      store.dispatch(new user.RegisterAction({
+        username: '',
+        email: '',
+        repeatEmail: '',
+        password: '',
+        repeatPassword: ''
+      }));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
-        expect(state.toJS()).toEqual(state.toJS());
+        expect(state.toJS()).toEqual({
+          loggedIn: false,
+          loggingIn: false,
+          registering: true,
+          loggingOut: false,
+          data: null
+        });
       });
     });
 
     it('should change state on REGISTER SUCCESS', () => {
-      store.dispatch(new user.RegisterSuccessAction(null));
+      store.dispatch(new user.RegisterSuccessAction(AngularFireAuthState));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
-        expect(state.toJS()).toEqual(state.toJS());
+        expect(state.toJS()).toEqual({
+          loggedIn: true,
+          loggingIn: false,
+          registering: false,
+          loggingOut: false,
+          data: AngularFireAuthState
+        });
       });
     });
 
@@ -157,7 +180,13 @@ describe('UserReducer', () => {
       store.dispatch(new user.RegisterFailAction(null));
 
       store.select(fromRoot.getUserState).subscribe((state: State) => {
-        expect(state.toJS()).toEqual(state.toJS());
+        expect(state.toJS()).toEqual({
+          loggedIn: false,
+          loggingIn: false,
+          registering: false,
+          loggingOut: false,
+          data: null
+        });
       });
     });
   });
@@ -171,6 +200,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
+          registering: false,
           loggingOut: true,
           data: AngularFireAuthState
         });
@@ -185,6 +215,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: false,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: null
         });
@@ -199,6 +230,7 @@ describe('UserReducer', () => {
         expect(state.toJS()).toEqual({
           loggedIn: true,
           loggingIn: false,
+          registering: false,
           loggingOut: false,
           data: AngularFireAuthState
         });
@@ -215,6 +247,12 @@ describe('UserReducer', () => {
   it('#isLoggingIn should return loggingIn from state', () => {
     store.select(fromRoot.isUserLoggingIn).subscribe((loggingIn: boolean) => {
       expect(loggingIn).toBe(false);
+    });
+  });
+
+  it('#isRegistering should return registering from state', () => {
+    store.select(fromRoot.isUserRegistering).subscribe((registering: boolean) => {
+      expect(registering).toBe(false);
     });
   });
 

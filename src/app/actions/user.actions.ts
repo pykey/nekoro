@@ -2,6 +2,8 @@ import { Action } from '@ngrx/store';
 import { FirebaseAuthState } from 'angularfire2';
 import { EmailPasswordCredentials } from 'angularfire2/auth';
 
+import { RegisterForm } from '../models/register-form.model';
+
 export const LOAD             = '[User] Load';
 export const LOAD_SUCCESS     = '[User] Load Success';
 export const LOAD_FAIL        = '[User] Load Fail';
@@ -58,12 +60,11 @@ export class LoginFailAction implements Action {
 /**
  * Register new user into Firebase
  *
- * TODO: Complete registration process, need to implement database to store user data
  */
 export class RegisterAction implements Action {
   type = REGISTER;
 
-  constructor(public readonly payload: any) { }
+  constructor(public readonly payload: RegisterForm) { }
 }
 
 export class RegisterSuccessAction implements Action {

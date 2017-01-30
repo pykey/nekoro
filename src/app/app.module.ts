@@ -11,12 +11,10 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AngularFireModule, AuthProviders, AuthMethods } from 'angularfire2';
 
 import { environment } from '../environments/environment';
-
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-
 import { AppComponent } from './app.component';
-
+import { NotificationEffects } from './effects/notification.effects';
 import { UserEffects } from './effects/user.effects';
 import { reducer } from './reducers';
 
@@ -33,6 +31,7 @@ export const firebaseAuthConfig = {
     FlexLayoutModule.forRoot(),
     MaterialModule.forRoot(),
 
+    EffectsModule.run(NotificationEffects),
     EffectsModule.run(UserEffects),
     RouterStoreModule.connectRouter(),
     StoreModule.provideStore(reducer),

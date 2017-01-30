@@ -1,5 +1,3 @@
-/* tslint:disable:no-unused-variable */
-
 import { Logger } from './logger';
 
 const logName = 'logger:spec';

@@ -1,4 +1,8 @@
-<h1>
-  {{title}}
-</h1>
-<router-outlet></router-outlet>
+<neko-core-layout fxLayout="row">
+  <neko-core-dashboard
+    fxFlex="40"
+    [loggedIn]="loggedIn$ | async"
+    (logout)="logout()"></neko-core-dashboard>
+
+  <router-outlet></router-outlet>
+</neko-core-layout>

@@ -1,35 +1,43 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed, async, inject, ComponentFixture } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EffectsTestingModule } from '@ngrx/effects/testing';
+import { MaterialModule } from '@angular/material';
 import { StoreModule } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 
 import { AppComponent } from './app.component';
+import { DashboardComponent } from './core/dashboard/dashboard.component';
+import { LayoutComponent } from './core/layout/layout.component';
 import { UserService } from './core/user.service';
-import * as fromRoot from './reducers';
 import { UserEffects } from './effects/user.effects';
+import * as fromRoot from './reducers';
 
 const userMethods = [
-  'auth'
+  'auth',
+  'logout'
 ];
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
   let userService: UserService;
   let userEffects: UserEffects;
   let mockUserService: any;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     mockUserService = jasmine.createSpyObj('user', userMethods);
     mockUserService.auth.and.returnValue(of(null));
+    mockUserService.logout.and.returnValue(Promise.resolve());
 
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        DashboardComponent,
+        LayoutComponent
       ],
       imports: [
         EffectsTestingModule,
+        MaterialModule.forRoot(),
         StoreModule.provideStore(fromRoot.reducer),
         RouterTestingModule
       ],
@@ -40,9 +48,14 @@ describe('AppComponent', () => {
         },
         UserEffects
       ],
-    });
+    })
+      .compileComponents();
+  }));
 
-    TestBed.compileComponents();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
     inject([UserService, UserEffects], (service: UserService, effects: UserEffects) => {
       userService = service;
@@ -50,29 +63,24 @@ describe('AppComponent', () => {
     })();
   });
 
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-
-  it(`should have as title 'neko works!'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('neko works!');
-  }));
-
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('neko works!');
-  }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
   describe('NgOnInit', () => {
-    it('should call auth mehotd on user service', () => {
+    it('should call auth method on user service', () => {
       userEffects.load$.subscribe(() => {
         expect(userService.auth).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Logout', () => {
+    it('should call logout method from user service', () => {
+      component.logout();
+
+      userEffects.logout$.subscribe(() => {
+        expect(userService.logout).toHaveBeenCalled();
       });
     });
   });

@@ -1,5 +1,3 @@
-/* tslint:disable:no-unused-variable */
-
 import * as user from './user.actions';
 
 describe('UserActions', () => {

@@ -1,0 +1,89 @@
+<md-dialog-content>
+  <form
+    id="registerForm"
+    [formGroup]="form"
+    (submit)="onSubmit()"
+    fxLayout="row"
+    fxLayoutWrap>
+    <md-input-container fxFlex="grow">
+      <input
+        type="text"
+        i18n-placeholder="Username Placeholder|Core Register Dialog"
+        placeholder="Nombre de usuario"
+        autocomplete="off"
+        formControlName="username"
+        md-input>
+
+      <md-hint *ngIf="errors.username" align="end" class="md-warn">{{ errors.username }}</md-hint>
+    </md-input-container>
+
+    <div fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between">
+      <md-input-container fxFlex="45">
+        <input
+          type="email"
+          i18n-placeholder="Email Placeholder|Core Register Dialog"
+          placeholder="Correo electrónico"
+          autocomplete="off"
+          formControlName="email"
+          md-input>
+
+        <md-hint *ngIf="errors.email" align="end" class="md-warn">{{ errors.email }}</md-hint>
+      </md-input-container>
+
+      <md-input-container fxFlex="45">
+        <input
+          type="email"
+          i18n-placeholder="Repeat Email Placeholder|Core Register Dialog"
+          placeholder="Repite el correo electrónico"
+          autocomplete="off"
+          formControlName="repeatEmail"
+          md-input>
+
+        <md-hint *ngIf="errors.repeatEmail" align="end" class="md-warn">{{ errors.repeatEmail }}</md-hint>
+      </md-input-container>
+    </div>
+
+    <div fxFlex="grow" fxLayout="row" fxLayoutAlign="space-between">
+      <md-input-container fxFlex="45">
+        <input
+          type="password"
+          i18n-placeholder="Password Placeholder|Core Register Dialog"
+          placeholder="Contraseña"
+          autocomplete="off"
+          formControlName="password"
+          md-input>
+
+        <md-hint *ngIf="errors.password" align="end" class="md-warn">{{ errors.password }}</md-hint>
+      </md-input-container>
+
+      <md-input-container fxFlex="45">
+        <input
+          type="password"
+          i18n-placeholder="Repeat Password Placeholder|Core Register Dialog"
+          placeholder="Repite la contraseña"
+          autocomplete="off"
+          formControlName="repeatPassword"
+          md-input>
+
+        <md-hint *ngIf="errors.repeatPassword" align="end" class="md-warn">{{ errors.repeatPassword }}</md-hint>
+      </md-input-container>
+    </div>
+  </form>
+</md-dialog-content>
+
+<md-dialog-actions
+  fxLayout="row"
+  fxLayoutAlign="space-between">
+
+  <button
+    i18n="Close Button|Core Register Dialog"
+    color="warn"
+    md-button
+    md-dialog-close>Cerrar</button>
+
+  <button
+    i18n="Create Account Button|Core Register Dialog"
+    color="accent"
+    form="registerForm"
+    md-button>Crear Cuenta</button>
+</md-dialog-actions>

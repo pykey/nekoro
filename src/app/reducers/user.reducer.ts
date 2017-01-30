@@ -9,6 +9,7 @@ const log = Logger.create('reducer:user');
 interface StateI {
   loggedIn: boolean;
   loggingIn: boolean;
+  registering: boolean;
   loggingOut: boolean;
   data: FirebaseAuthState | null;
 }
@@ -16,6 +17,7 @@ interface StateI {
 const initialState: StateI = {
   loggedIn: false,
   loggingIn: false,
+  registering: false,
   loggingOut: false,
   data: null
 }, stateRecord = Record(initialState);
@@ -23,6 +25,7 @@ const initialState: StateI = {
 export class State extends stateRecord implements StateI {
   loggedIn: boolean;
   loggingIn: boolean;
+  registering: boolean;
   loggingOut: boolean;
   data: FirebaseAuthState | null;
 }
@@ -111,29 +114,29 @@ export const reducer = (state = new State(), action: user.Actions): State => {
       return state.set('loggingIn', false) as State;
     }
 
-    /**
-     * TODO: WIP
-     */
     case user.REGISTER: {
-      return state;
+      log.debug('Requested user register on Firebase');
+
+      return state.set('registering', true) as State;
     }
 
-    /**
-     * TODO: WIP
-     */
     case user.REGISTER_SUCCESS: {
-      return state;
+      const data = action.payload;
+
+      log.info('Registered into Firebase');
+
+      return state
+        .set('loggedIn', true)
+        .set('registering', false)
+        .set('data', data) as State;
     }
 
-    /**
-     * TODO: WIP
-     */
     case user.REGISTER_FAIL: {
       const err = action.payload;
 
       log.error('Error while trying to register a new account into Firebase', err);
 
-      return state;
+      return state.set('registering', false) as State;
     }
 
     /**
@@ -178,5 +181,6 @@ export const reducer = (state = new State(), action: user.Actions): State => {
 
 export const isLoggedIn = (state: State): boolean => state.get('loggedIn');
 export const isLoggingIn = (state: State): boolean => state.get('loggingIn');
+export const isRegistering = (state: State): boolean => state.get('registering');
 export const isLoggingOut = (state: State): boolean => state.get('loggingOut');
 export const getData = (state: State): FirebaseAuthState | null => state.get('data');

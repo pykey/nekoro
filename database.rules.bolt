@@ -1,4 +1,45 @@
-path / {
-  read() { true }
-  write() { true }
+// Utility functions
+isLoggedIn() { auth != null }
+isCurrentUser(uid) { isLoggedIn() && auth.uid == uid }
+getUsername(username) { prior(root).usernames[username.toLowerCase()] }
+
+// Value types
+type Username extends String {
+  validate() { this.length >= 4 && this.length <= 24 }
 }
+
+type UniqueUsername extends Username {
+  validate() { getUsername(this) == uid }
+}
+
+type InitialTimestamp extends Number {
+  validate() { this == (prior(this) == null ? now : prior(this)) }
+}
+
+type CurrentTimestamp extends Number {
+  validate() { this == now }
+}
+
+// Extended types
+type Timestamped<T> extends T {
+  created_at: InitialTimestamp;
+  updated_at: CurrentTimestamp;
+}
+
+// Path types
+type Users {
+  read() { true }
+  write() { this != null && isCurrentUser(uid) }
+
+  username: UniqueUsername;
+}
+
+type Usernames extends String {
+  read() { true }
+  write() { prior(this) == null || prior(this) == auth.uid }
+}
+
+// Paths
+path /users/{uid} is Timestamped<Users>;
+
+path /usernames/{username} is Usernames;
