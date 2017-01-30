@@ -153,7 +153,7 @@ describe('UserService', () => {
         .take(1)
         .do(authData => expect(authData.auth).toEqual(AngularFireAuthState.auth))
         .subscribe(null, done.fail, done);
-    }, 10);
+    }, 1000);
   });
 
   describe('Login', () => {

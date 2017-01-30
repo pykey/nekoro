@@ -65,6 +65,6 @@ describe('DashboardComponent', () => {
       component.logout.subscribe(done);
 
       component.doLogout();
-    }, 10);
+    }, 1000);
   });
 });
