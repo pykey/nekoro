@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/DarkerTV/nekoro.svg?branch=master)](https://travis-ci.org/DarkerTV/nekoro)
-[![Coverage Status](https://coveralls.io/repos/github/DarkerTV/nekoro/badge.svg?branch=master)](https://coveralls.io/github/DarkerTV/nekoro?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d27c5cc3cdac4339a30d4153aabe7f83)](https://www.codacy.com/app/DarkerTV/nekoro?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DarkerTV/nekoro&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/d27c5cc3cdac4339a30d4153aabe7f83)](https://www.codacy.com/app/DarkerTV/nekoro?utm_source=github.com&utm_medium=referral&utm_content=DarkerTV/nekoro&utm_campaign=Badge_Coverage)
 
 # Nekoro
 
