@@ -67,7 +67,6 @@ export class FormService {
     log.debug('Parse form fields');
 
     for (const field in fields) {
-      /* istanbul ignore else  */
       if (fields.hasOwnProperty(field)) {
         const data = fields[field];
 
@@ -96,7 +95,6 @@ export class FormService {
     const form = this.form;
 
     for (const field in this.formErrors) {
-      /* istanbul ignore else  */
       if (this.formErrors.hasOwnProperty(field)) {
         this.formErrors[field] = '';
 
