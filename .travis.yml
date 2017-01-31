@@ -23,6 +23,5 @@ before_install:
 script: npm run build
 
 after_success:
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then npm run coveralls; fi'
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then npm run codacy; fi'
+  - npm run codecov
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then firebase deploy --message="$COMMIT_MESSAGE" --token=${FIREBASE_TOKEN}; fi'
